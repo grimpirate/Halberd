@@ -9,15 +9,9 @@ class Registrar
     {
         return [
             'actions' => [
-                'register' => 'GrimPirate\Halberd\Authentication\Actions\Register',
-                'login'    => 'GrimPirate\Halberd\Authentication\Actions\Login',
+                'register' => \GrimPirate\Halberd\Authentication\Actions\Register::class,
+                'login'    => \GrimPirate\Halberd\Authentication\Actions\Login::class,
             ],
         ];
     }
-
-    // Enable authorization on all routes except login, register, and auth
-    /*public static function Filters(): array
-    {
-        return ['globals' => ['before' => ['session' => ['except' => ['login*', 'register', 'auth/a/*']]]]];
-    }*/
 }
