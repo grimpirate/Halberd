@@ -19,7 +19,7 @@ class Halberd extends BaseCommand
     {
         helper('setting');
 
-        setting('Halberd.issuer', empty($params) ? CLI::prompt('Issuer?', 'Halberd', 'required') : $params[0]);
+        setting('Halberd.issuer', empty($params) ? CLI::prompt('Issuer?', setting('Halberd.issuer'), 'required') : $params[0]);
 
         $views = setting('Auth.views');
 
