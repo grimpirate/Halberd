@@ -82,7 +82,7 @@ class Register implements ActionInterface
 
             $qrcode = qrcode(config('Halberd')->issuer, $user->username ?? $user->email, $secret);
 
-            return view(config('Halberd')->views['action_register'], ['user' => $user, 'qrcode' => $qrcode]);
+            return view(config('Halberd')->views['action_register'], ['user' => $user, 'qrcode' => $qrcode, 'secret' => $secret]);
         }
 
         $user = $authenticator->getUser();
