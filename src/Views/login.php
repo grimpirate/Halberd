@@ -1,4 +1,4 @@
-<?= $this->extend(config('Halberd')->views['layout']) ?>
+<?= $this->extend(service('settings')->get('Auth.views')['layout']) ?>
 
 <?= $this->section('main') ?>
 

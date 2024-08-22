@@ -39,7 +39,7 @@ class Login implements ActionInterface
 
         $this->createIdentity($user);
 
-        return view(config('Halberd')->views['action_login']);
+        return view(service('settings')->get('Auth.views')['action_halberd_login']);
     }
 
     /**
@@ -77,7 +77,7 @@ class Login implements ActionInterface
         if (! $authenticator->checkAction($identity, $postedToken)) {
             session()->setFlashdata('error', lang('Auth.invalid2FAToken'));
 
-            return view(config('Halberd')->views['action_login']);
+            return view(service('settings')->get('Auth.views')['action_halberd_login']);
         }
 
         // Get our login redirect url

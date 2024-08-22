@@ -40,7 +40,7 @@ class Register implements ActionInterface
         $qrcode = qrcode(service('settings')->get('Halberd.issuer'), $user->username ?? $user->email, $secret);
 
         // Display the info page
-        return view(config('Halberd')->views['action_register'], ['user' => $user, 'qrcode' => $qrcode, 'secret' => $secret]);
+        return view(service('settings')->get('Auth.views')['action_halberd_register'], ['user' => $user, 'qrcode' => $qrcode, 'secret' => $secret]);
     }
 
     /**
@@ -82,7 +82,7 @@ class Register implements ActionInterface
 
             $qrcode = qrcode(service('settings')->get('Halberd.issuer'), $user->username ?? $user->email, $secret);
 
-            return view(config('Halberd')->views['action_register'], ['user' => $user, 'qrcode' => $qrcode, 'secret' => $secret]);
+            return view(service('settings')->get('Auth.views')['action_halberd_register'], ['user' => $user, 'qrcode' => $qrcode, 'secret' => $secret]);
         }
 
         $user = $authenticator->getUser();
