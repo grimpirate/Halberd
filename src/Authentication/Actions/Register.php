@@ -36,10 +36,11 @@ class Register implements ActionInterface
         }
 
         helper('google2fa');
-        $qrcode = qrcode(config('Halberd')->issuer, $user->username ?? $user->email, $this->createIdentity($user));
+        $secret = $this->createIdentity($user);
+        $qrcode = qrcode(config('Halberd')->issuer, $user->username ?? $user->email, $secret);
 
         // Display the info page
-        return view(config('Halberd')->views['action_register'], ['user' => $user, 'qrcode' => $qrcode]);
+        return view(config('Halberd')->views['action_register'], ['user' => $user, 'qrcode' => $qrcode, 'secret' => $secret]);
     }
 
     /**

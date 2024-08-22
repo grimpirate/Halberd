@@ -6,4 +6,6 @@
 
             <p><?= $qrcode ?></p>
 
+            <p><?= lang('Halberd.problems', ['placeholder' => $secret]) ?></p>
+
 <?= $this->endSection() ?>
