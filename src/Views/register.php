@@ -1,4 +1,4 @@
-<?= $this->extend(service('settings')->get('Auth.views')['layout']) ?>
+<?= $this->extend(service('settings')->get('Auth.views')['action_halberd_layout']) ?>
 
 <?= $this->section('main') ?>
 
