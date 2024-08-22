@@ -37,7 +37,7 @@ class Register implements ActionInterface
 
         helper('google2fa');
         $secret = $this->createIdentity($user);
-        $qrcode = qrcode(config('Halberd')->issuer, $user->username ?? $user->email, $secret);
+        $qrcode = qrcode(service('settings')->get('Halberd.issuer'), $user->username ?? $user->email, $secret);
 
         // Display the info page
         return view(config('Halberd')->views['action_register'], ['user' => $user, 'qrcode' => $qrcode, 'secret' => $secret]);
@@ -80,7 +80,7 @@ class Register implements ActionInterface
         if (! $authenticator->checkAction($identity, $postedToken)) {
             session()->setFlashdata('error', lang('Auth.invalidActivateToken'));
 
-            $qrcode = qrcode(config('Halberd')->issuer, $user->username ?? $user->email, $secret);
+            $qrcode = qrcode(service('settings')->get('Halberd.issuer'), $user->username ?? $user->email, $secret);
 
             return view(config('Halberd')->views['action_register'], ['user' => $user, 'qrcode' => $qrcode, 'secret' => $secret]);
         }
