@@ -8,11 +8,15 @@ composer config prefer-stable true
 composer require grimpirate/halberd:dev-develop
 ```
 ## Configuration
-In the application's *.env* file *halberd.issuer* denotes the string that will appear on the Google Authenticator app as follows: ISSUER(username)
+In the application's configuration ([*.env*](https://codeigniter.com/user_guide/general/configuration.html#dotenv-file)), *issuer* denotes the string that will appear on the Google Authenticator app as follows: ISSUER: username/email
 ```
+GrimPirate\Halberd\Config\Halberd.issuer = 'ISSUER'
+OR
 halberd.issuer = 'ISSUER'
+OR
+halberd_issuer = 'ISSUER'
 ```
-Also supports the use of [codeigniter4/settings](https://github.com/codeigniter4/settings) to maintain the *issuer* value in a database
+Also supports the use of [codeigniter4/settings](https://github.com/codeigniter4/settings) to maintain *issuer* in a database
 ```
 service('settings')->set('Halberd.issuer', 'ISSUER');
 ```
