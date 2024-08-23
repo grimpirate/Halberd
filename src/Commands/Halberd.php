@@ -8,18 +8,18 @@ use CodeIgniter\CLI\CLI;
 class Halberd extends BaseCommand
 {
     protected $group =          'Halberd';
-    protected $name =           'halberd:init';
-    protected $description =    'Initializes configuration parameters for Halberd.';
-    protected $usage =          'halberd:init <issuer>';
+    protected $name =           'halberd:ini';
+    protected $description =    lang('Halberd.prompt.description');
+    protected $usage =          lang('Halberd.prompt.usage');
     protected $arguments = [
-        'issuer' => 'The One-Time Password (OTP) issuer',
+        'issuer' => lang('Halberd.prompt.arguments.issuer'),
     ];
 
     public function run(array $params)
     {
         helper('setting');
 
-        setting('Halberd.issuer', empty($params) ? CLI::prompt('Issuer?', setting('Halberd.issuer'), 'required') : $params[0]);
+        setting('Halberd.issuer', empty($params) ? CLI::prompt(lang('Halberd.prompt.input'), setting('Halberd.issuer') ?? 'Halberd', 'required') : $params[0]);
 
         $views = setting('Auth.views');
 
