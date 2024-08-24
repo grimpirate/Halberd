@@ -4,16 +4,23 @@ namespace GrimPirate\Halberd\Commands;
 
 use CodeIgniter\CLI\BaseCommand;
 use CodeIgniter\CLI\CLI;
+use CodeIgniter\CLI\Commands;
+use Psr\Log\LoggerInterface;
 
 class Halberd extends BaseCommand
 {
     protected $group =          'Halberd';
     protected $name =           'halberd:ini';
-    protected $description =    lang('Halberd.prompt.description');
-    protected $usage =          lang('Halberd.prompt.usage');
-    protected $arguments = [
-        'issuer' => lang('Halberd.prompt.arguments.issuer'),
-    ];
+
+    public function __construct(LoggerInterface $logger, Commands $commands)
+    {
+        parent::__construct($logger, $commands);
+        $this->description   = lang('Halberd.prompt.description');
+        $this->usage = lang('Halberd.prompt.usage');
+        $this->arguments = [
+            'issuer' => lang('Halberd.prompt.arguments.issuer'),
+        ];
+    }
 
     public function run(array $params)
     {
