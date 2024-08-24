@@ -1,3 +1,4 @@
+<?php helper('html'); ?>
 <!doctype html>
 <html lang="<?= service('request')->getLocale() ?>">
 <head>
@@ -5,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title><?= lang('Halberd.title2FA') ?></title>
+
+    <?= link_tag('css/halberd.css') ?>
 </head>
 
 <body>

@@ -17,8 +17,8 @@ if(!function_exists('qrcode'))
 		));
 
 		return preg_replace(
-			'/<svg/',
-			'<svg style="width: 100%; height: 300px"',
+			'/^<[^>]+>\v/',	// Remove xml definition for inline SVG
+			'',
 			$writer->writeString((new Google2FA())->getQRCodeUrl($issuer, $accountname, $secret)));
 	}
 }
