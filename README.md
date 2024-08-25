@@ -18,6 +18,15 @@ Halberd input form(s) stylesheet should be located at
 ```
 public/css/halberd.css
 ```
+The QR Code will not be visible without some styling, for instance
+```
+svg
+{
+  width: 100%;
+  height: 240px;
+  fill-rule: evenodd;
+}
+```
 ## Supported Locales
 * en (English)
 * es (Español)
