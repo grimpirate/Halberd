@@ -1,5 +1,8 @@
-<?php helper('html'); ?>
-<!doctype html>
+<?php
+helper('html');
+helper('form');
+?>
+<?= doctype() ?>
 <html lang="<?= service('request')->getLocale() ?>">
 <head>
     <meta charset="utf-8">
@@ -24,11 +27,17 @@
 
     <p><?= lang('Halberd.problems', ['placeholder' => $secret]) ?></p>
 <?php endif ?>
-    
-    <form action="<?= url_to('auth-action-verify') ?>" method="post">
-        <?= csrf_field() ?>
-        <input type="number" name="token" placeholder="000000" inputmode="numeric" pattern="[0-9]{6}" required />
-        <button type="submit"><?= lang('Auth.confirm') ?></button>
-    </form>
+
+    <?= form_open(url_to('auth-action-verify')) ?>
+        <?= form_input([
+            'type' => 'number',
+            'name' => 'token',
+            'placeholder' => '000000',
+            'inputmode' => 'numeric',
+            'pattern' => '[0-9]{6}',
+            'required' => true,
+        ]) ?>
+        <?= form_submit('', lang('Auth.confirm')) ?>
+    <?= form_close() ?>
 </body>
 </html>
