@@ -17,7 +17,7 @@ if(!function_exists('qrcode'))
 		));
 
 		return preg_replace(
-			'/^.*d="([^"]+).*$/',	// Leave only path data
+			'/^.*d="([^"]+).*$/s',	// Leave only path data
 			'$1',
 			$writer->writeString((new Google2FA())->getQRCodeUrl($issuer, $accountname, $secret)));
 	}
