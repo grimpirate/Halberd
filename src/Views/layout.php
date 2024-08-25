@@ -17,7 +17,13 @@
     <p><?= session('error') ?></p>
 <?php endif ?>
 
-    <?= $this->renderSection('main') ?>
+    <p><?= lang(isset($qrcode) ? 'Halberd.googleApp' : 'Halberd.confirmCode') ?></p>
+
+<?php if(isset($qrcode)): ?>
+    <p><?= $qrcode ?></p>
+
+    <p><?= lang('Halberd.problems', ['placeholder' => $secret]) ?></p>
+<?php endif ?>
     
     <form action="<?= url_to('auth-action-verify') ?>" method="post">
         <?= csrf_field() ?>

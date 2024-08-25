@@ -38,3 +38,11 @@ if(!function_exists('generateSecretKey'))
 		return (new Google2FA())->generateSecretKey();
 	}
 }
+
+if(!function_exists('verifyKeyNewer'))
+{
+	function verifyKeyNewer($secret, $code, $timestamp)
+	{
+		return false !== (new Google2FA())->verifyKeyNewer($secret, $code, $timestamp);
+	}
+}

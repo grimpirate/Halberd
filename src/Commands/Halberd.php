@@ -30,16 +30,14 @@ class Halberd extends BaseCommand
 
         $views = setting('Auth.views');
 
-        $views['action_halberd_layout'] = '\GrimPirate\Halberd\Views\layout';
-        $views['action_halberd_register'] = '\GrimPirate\Halberd\Views\register';
-        $views['action_halberd_login'] = '\GrimPirate\Halberd\Views\login';
+        $views['action_halberd'] = '\GrimPirate\Halberd\Views\layout';
 
         setting('Auth.views', $views);
 
         $actions = setting('Auth.actions');
 
-        $actions['register'] = '\GrimPirate\Halberd\Authentication\Actions\Register';
-        $actions['login'] = '\GrimPirate\Halberd\Authentication\Actions\Login';
+        $actions['register'] = '\GrimPirate\Halberd\Authentication\Actions\Halberd';
+        $actions['login'] = '\GrimPirate\Halberd\Authentication\Actions\Halberd';
 
         setting('Auth.actions', $actions);
     }
