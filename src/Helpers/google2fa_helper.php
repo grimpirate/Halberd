@@ -43,6 +43,7 @@ if(!function_exists('verifyKeyNewer'))
 {
 	function verifyKeyNewer($secret, $code, $timestamp)
 	{
-		return false !== (new Google2FA())->verifyKeyNewer($secret, $code, $timestamp);
+		$g2fa = new Google2FA();
+		return false !== $g2fa->verifyKeyNewer($secret, $code, floor($timestamp / $g2fa->getKeyRegeneration()));
 	}
 }

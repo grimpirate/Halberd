@@ -33,9 +33,8 @@ class Halberd implements ActionInterface
         $authenticator = auth('session')->getAuthenticator();
 
         $user = $authenticator->getPendingUser();
-        if ($user === null) {
+        if ($user === null)
             throw new RuntimeException('Cannot get the pending login User.');
-        }
 
         $identity = $this->getIdentity($user);
 
@@ -68,9 +67,8 @@ class Halberd implements ActionInterface
         $postedToken = $request->getVar('token');
 
         $user = $authenticator->getPendingUser();
-        if ($user === null) {
+        if ($user === null)
             throw new RuntimeException('Cannot get the pending login User.');
-        }
 
         helper('google2fa');
         $identity = $this->getIdentity($user);
@@ -80,8 +78,8 @@ class Halberd implements ActionInterface
 
         // No match - let them try again.
         if (
-            ! verifyKeyNewer($secret, $identity->secret, $identity->last_used_at)
-            || ! $authenticator->checkAction($identity, $postedToken)
+            ! verifyKeyNewer($secret, $postedToken, $identity->last_used_at->getTimestamp()) ||
+            ! $authenticator->checkAction($identity, $postedToken)
         ) {
             session()->setFlashdata('error', lang($register ? 'Auth.invalidActivateToken' : 'Auth.invalid2FAToken'));
 
@@ -119,6 +117,10 @@ class Halberd implements ActionInterface
      */
     public function createIdentity(User $user): string
     {
+        $identity = $this->getIdentity($user);
+        if(null !== $identity)
+            return $identity->secret;
+
         helper('google2fa');
         $secret = generateSecretKey();
         return $this->generateIdentity(
@@ -127,7 +129,7 @@ class Halberd implements ActionInterface
                 'type'  => self::TYPE,
                 'extra'  => self::REGISTER,
                 'secret2' => qrcode(service('settings')->get('Halberd.issuer'), $user->username ?? $user->email, $secret),
-                'last_used_at' => Time::now(),
+                'last_used_at' => Time::yesterday(),
             ],
             static fn (): string => $secret,
             true
@@ -159,15 +161,7 @@ class Halberd implements ActionInterface
         /** @var UserIdentityModel $identityModel */
         $identityModel = model(UserIdentityModel::class);
 
-        $identity = $identityModel->getIdentityByType(
-            $user,
-            self::TYPE
-        );
-
-        if(null === $identity)
-            $this->createIdentity($user);
-
-        return $identity->getIdentityByType(
+        return $identityModel->getIdentityByType(
             $user,
             self::TYPE
         );
