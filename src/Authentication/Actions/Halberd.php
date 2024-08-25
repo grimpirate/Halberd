@@ -18,9 +18,11 @@ use CodeIgniter\Shield\Models\UserIdentityModel;
 
 use CodeIgniter\Shield\Authentication\Actions\ActionInterface;
 
-class Register implements ActionInterface
+class Halberd implements ActionInterface
 {
-    private string $type = 'halberd_register';
+    private const REGISTER = 'register';
+    private const LOGIN = 'login';
+    private const TYPE = 'google_2fa';
 
     /**
      * Shows the initial screen to the user with a QR code for activation
@@ -31,16 +33,14 @@ class Register implements ActionInterface
         $authenticator = auth('session')->getAuthenticator();
 
         $user = $authenticator->getPendingUser();
-        if ($user === null) {
+        if ($user === null)
             throw new RuntimeException('Cannot get the pending login User.');
-        }
 
-        helper('google2fa');
-        $secret = $this->createIdentity($user);
-        $qrcode = qrcode(service('settings')->get('Halberd.issuer'), $user->username ?? $user->email, $secret);
+        $identity = $this->getIdentity($user);
 
-        // Display the info page
-        return view(service('settings')->get('Auth.views')['action_halberd_register'], ['user' => $user, 'qrcode' => $qrcode, 'secret' => $secret]);
+        $register = $identity->extra === self::REGISTER;
+
+        return view(service('settings')->get('Auth.views')['action_halberd'], $register ? ['qrcode' => $identity->secret2, 'secret' => $identity->secret] : []);
     }
 
     /**
@@ -67,41 +67,47 @@ class Register implements ActionInterface
         $postedToken = $request->getVar('token');
 
         $user = $authenticator->getPendingUser();
-        if ($user === null) {
+        if ($user === null)
             throw new RuntimeException('Cannot get the pending login User.');
-        }
 
         helper('google2fa');
         $identity = $this->getIdentity($user);
         $secret = $identity->secret;
+        $register = $identity->extra === self::REGISTER;
         $identity->secret = getCurrentOtp($secret);
 
         // No match - let them try again.
-        if (! $authenticator->checkAction($identity, $postedToken)) {
-            session()->setFlashdata('error', lang('Auth.invalidActivateToken'));
+        if (
+            ! verifyKeyNewer($secret, $postedToken, $identity->last_used_at->getTimestamp()) ||
+            ! $authenticator->checkAction($identity, $postedToken)
+        ) {
+            session()->setFlashdata('error', lang($register ? 'Auth.invalidActivateToken' : 'Auth.invalid2FAToken'));
 
-            $qrcode = qrcode(service('settings')->get('Halberd.issuer'), $user->username ?? $user->email, $secret);
-
-            return view(service('settings')->get('Auth.views')['action_halberd_register'], ['user' => $user, 'qrcode' => $qrcode, 'secret' => $secret]);
+            return view(service('settings')->get('Auth.views')['action_halberd'], $register ? ['qrcode' => $identity->secret2, 'secret' => $secret] : []);
         }
 
         $user = $authenticator->getUser();
 
-        // Set the user active now
-        $user->activate();
+        if($user->isNotActivated())
+            $user->activate();
 
         $this->generateIdentity(
             $user,
             [
-                'type'  => 'google_2fa',
+                'type'  => self::TYPE,
+                'extra'  => self::LOGIN,
+                'secret2' => $identity->secret2,
+                'last_used_at' => Time::now(),
             ],
             static fn (): string => $secret,
-            false
+            true
         );
 
         // Success!
-        return redirect()->to(config('Auth')->registerRedirect())
-            ->with('message', lang('Auth.registerSuccess'));
+        return $register ? 
+            redirect()->to(config('Auth')->registerRedirect())
+            ->with('message', lang('Auth.registerSuccess'))
+            : redirect()->to(config('Auth')->loginRedirect());
     }
 
     /**
@@ -111,15 +117,21 @@ class Register implements ActionInterface
      */
     public function createIdentity(User $user): string
     {
+        $identity = $this->getIdentity($user);
+        if(null !== $identity)
+            return $identity->secret;
+
         helper('google2fa');
+        $secret = generateSecretKey();
         return $this->generateIdentity(
             $user,
             [
-                'type'  => $this->type,
-                'name'  => 'register',
-                'extra' => lang('Halberd.needVerification'),
+                'type'  => self::TYPE,
+                'extra'  => self::REGISTER,
+                'secret2' => qrcode(service('settings')->get('Halberd.issuer'), $user->username ?? $user->email, $secret),
+                'last_used_at' => Time::yesterday(),
             ],
-            'generateSecretKey',
+            static fn (): string => $secret,
             true
         );
     }
@@ -151,7 +163,7 @@ class Register implements ActionInterface
 
         return $identityModel->getIdentityByType(
             $user,
-            $this->type
+            self::TYPE
         );
     }
 
@@ -160,6 +172,6 @@ class Register implements ActionInterface
      */
     public function getType(): string
     {
-        return $this->type;
+        return self::TYPE;
     }
 }
