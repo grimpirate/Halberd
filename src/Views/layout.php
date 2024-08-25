@@ -20,7 +20,7 @@
     <p><?= lang(isset($qrcode) ? 'Halberd.googleApp' : 'Halberd.confirmCode') ?></p>
 
 <?php if(isset($qrcode)): ?>
-    <p><?= $qrcode ?></p>
+    <p><svg version="1.1" viewBox="-4 -4 45 45"><path d="<?= $qrcode ?>" /></svg></p>
 
     <p><?= lang('Halberd.problems', ['placeholder' => $secret]) ?></p>
 <?php endif ?>
