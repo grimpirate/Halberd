@@ -12,8 +12,6 @@ The TOTP authenticator class must be added to the Config/Auth file
 ```
 ...
 
-use Grimpirate\Halberd\Authentication\Authenticators\TOTP;
-
 class Auth extends BaseConfig
 {
 
@@ -24,7 +22,7 @@ class Auth extends BaseConfig
     'session' => Session::class,
     'hmac'    => HmacSha256::class,
     // 'jwt'     => JWT::class,
-    'totp'    => TOTP::class,
+    'totp'    => Grimpirate\Halberd\Authentication\Authenticators\TOTP::class,
   ];
 
   ...
