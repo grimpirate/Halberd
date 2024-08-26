@@ -12,7 +12,6 @@ use CodeIgniter\I18n\Time;
 use GrimPirate\Halberd\Authentication\Authenticators\TOTP;
 use CodeIgniter\Shield\Entities\User;
 use CodeIgniter\Shield\Entities\UserIdentity;
-use CodeIgniter\Shield\Exceptions\LogicException;
 use CodeIgniter\Shield\Exceptions\RuntimeException;
 use CodeIgniter\Shield\Models\UserIdentityModel;
 use CodeIgniter\Shield\Traits\Viewable;
