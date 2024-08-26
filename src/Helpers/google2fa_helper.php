@@ -44,7 +44,7 @@ if(!function_exists('qrcode'))
 				$path[$i + 1] = $currCoord[1];
 		}
 
-		return implode('', $path);
+		return base64_encode(gzcompress(implode('', $path), 9));
 	}
 }
 
