@@ -1,5 +1,5 @@
 # Halberd
-A CodeIgniter TOTP (Time-Based One-Time Password) Two-Factor Authentication Module for Shield
+A TOTP (Time-Based One-Time Password) Two-Factor Authentication Module for CodeIgniter's Shield
 ## Installation
 Project should have a stability level of dev
 ```
