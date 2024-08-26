@@ -48,14 +48,6 @@ if(!function_exists('qrcode'))
 	}
 }
 
-if(!function_exists('getCurrentOtp'))
-{
-	function getCurrentOtp($secret)
-	{
-		return (new Google2FA())->getCurrentOtp($secret);
-	}
-}
-
 if(!function_exists('generateSecretKey'))
 {
 	function generateSecretKey()

@@ -15,10 +15,10 @@ class Halberd extends BaseCommand
     public function __construct(LoggerInterface $logger, Commands $commands)
     {
         parent::__construct($logger, $commands);
-        $this->description   = lang('Halberd.prompt.description');
-        $this->usage = lang('Halberd.prompt.usage');
+        $this->description   = lang('TOTP.prompt.description');
+        $this->usage = lang('TOTP.prompt.usage');
         $this->arguments = [
-            'issuer' => lang('Halberd.prompt.arguments.issuer'),
+            'issuer' => lang('TOTP.prompt.arguments.issuer'),
         ];
     }
 
@@ -26,11 +26,11 @@ class Halberd extends BaseCommand
     {
         helper('setting');
 
-        setting('Halberd.issuer', empty($params) ? CLI::prompt(lang('Halberd.prompt.input'), setting('Halberd.issuer') ?? 'Halberd', 'required') : $params[0]);
+        setting('TOTP.issuer', empty($params) ? CLI::prompt(lang('TOTP.prompt.input'), setting('TOTP.issuer') ?? 'Halberd', 'required') : $params[0]);
 
         $views = setting('Auth.views');
 
-        $views['action_halberd'] = '\GrimPirate\Halberd\Views\layout';
+        $views['action_totp'] = '\GrimPirate\Halberd\Views\layout';
 
         setting('Auth.views', $views);
 

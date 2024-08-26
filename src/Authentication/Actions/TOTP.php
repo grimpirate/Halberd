@@ -1,0 +1,151 @@
+<?php
+
+declare(strict_types=1);
+
+namespace GrimPirate\Halberd\Authentication\Actions;
+
+use CodeIgniter\Exceptions\PageNotFoundException;
+use CodeIgniter\HTTP\IncomingRequest;
+use CodeIgniter\HTTP\RedirectResponse;
+use CodeIgniter\HTTP\Response;
+use CodeIgniter\I18n\Time;
+use GrimPirate\Halberd\Authentication\Authenticators\TOTP;
+use CodeIgniter\Shield\Entities\User;
+use CodeIgniter\Shield\Entities\UserIdentity;
+use CodeIgniter\Shield\Exceptions\LogicException;
+use CodeIgniter\Shield\Exceptions\RuntimeException;
+use CodeIgniter\Shield\Models\UserIdentityModel;
+use CodeIgniter\Shield\Traits\Viewable;
+
+use CodeIgniter\Shield\Authentication\Actions\ActionInterface;
+
+class TOTP implements ActionInterface
+{
+    use Viewable;
+    
+    private string $type = TOTP::ID_TYPE_TOTP_2FA;
+
+    /**
+     * Shows the initial screen to the user with a QR code for activation
+     */
+    public function show(): string
+    {
+        /** @var TOTP $authenticator */
+        $authenticator = auth('totp')->getAuthenticator();
+
+        $user = $authenticator->getPendingUser();
+        if ($user === null)
+            throw new RuntimeException('Cannot get the pending login User.');
+
+        return view(service('settings')->get('Auth.views')['action_totp'], $user->isNotActivated() ? ['qrcode' => $identity->secret2, 'secret' => $identity->secret] : []);
+    }
+
+    /**
+     * This method is unused.
+     *
+     * @return Response|string
+     */
+    public function handle(IncomingRequest $request)
+    {
+        throw new PageNotFoundException();
+    }
+
+    /**
+     * Verifies the QR code matches an
+     * identity we have for that user.
+     *
+     * @return RedirectResponse|string
+     */
+    public function verify(IncomingRequest $request)
+    {
+        /** @var TOTP $authenticator */
+        $authenticator = auth('totp')->getAuthenticator();
+
+        $postedToken = $request->getVar('token');
+
+        $user = $authenticator->getPendingUser();
+        if ($user === null)
+            throw new RuntimeException('Cannot get the pending login User.');
+
+        $identity = $this->getIdentity($user);
+
+        // No match - let them try again.
+        if (! $authenticator->checkAction($identity, $postedToken)) {
+            session()->setFlashdata('error', lang($user->isNotActivated() ? 'Auth.invalidActivateToken' : 'Auth.invalid2FAToken'));
+
+            return view(service('settings')->get('Auth.views')['action_totp'], $user->isNotActivated() ? ['qrcode' => $identity->secret2, 'secret' => $secret] : []);
+        }
+
+        // getUser instead of getPendingUser updates user state to LOGGED_IN
+        $user = $authenticator->getUser();
+
+        $isNotActivated = $user->isNotActivated();
+
+        if($isNotActivated)
+            $user->activate();
+
+        // Success!
+        return $isNotActivated ? 
+            redirect()->to(config('Auth')->registerRedirect())
+            ->with('message', lang('Auth.registerSuccess'))
+            : redirect()->to(config('Auth')->loginRedirect());
+    }
+
+    /**
+     * Creates an identity for the action of the user.
+     *
+     * @return string secret
+     */
+    public function createIdentity(User $user): string
+    {
+        /** @var UserIdentityModel $identityModel */
+        $identityModel = model(UserIdentityModel::class);
+
+        $identity = $identityModel->getIdentityByType(
+            $user,
+            $this->type
+        );
+
+        if(null !== $identity)
+            return $identity->secret;
+
+        // Delete any previous identities for action
+        if($deletePriors)
+            $identityModel->deleteIdentitiesByType($user, $this->type);
+
+        helper('totp2fa');
+        $secret = generateSecretKey();
+
+        return $identityModel->createCodeIdentity(
+            $user,
+            [
+                'type'  => $this->type,
+                'secret2' => qrcode(service('settings')->get('TOTP.issuer'), $user->username ?? $user->email, $secret),
+                'last_used_at' => Time::yesterday(),
+            ],
+            static fn (): string => $secret
+        );
+    }
+
+    /**
+     * Returns an identity for the action of the user.
+     */
+    private function getIdentity(User $user): ?UserIdentity
+    {
+        /** @var UserIdentityModel $identityModel */
+        $identityModel = model(UserIdentityModel::class);
+
+        return $identityModel->getIdentityByType(
+            $user,
+            $this->type
+        );
+    }
+
+    /**
+     * Returns the string type of the action class.
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+}

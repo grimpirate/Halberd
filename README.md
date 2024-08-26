@@ -8,7 +8,28 @@ composer config prefer-stable true
 composer require grimpirate/halberd:dev-develop
 ```
 ## Configuration
-After installation via composer a spark command is provided to finalize installation. It will use [codeigniter4/settings](https://github.com/codeigniter4/settings) to set up the configuration for: Auth.views, Auth.actions, and Halberd.issuer
+The TOTP authenticator class must be added to the Config/Auth file
+```
+...
+
+use Grimpirate\Halberd\Authenticators\TOTP;
+
+class Auth extends BaseConfig
+{
+
+  ...
+
+  public array $authenticators = [
+    'tokens'  => AccessTokens::class,
+    'session' => Session::class,
+    'hmac'    => HmacSha256::class,
+    // 'jwt'     => JWT::class,
+    'totp'    => TOTP::class,
+  ];
+
+  ...
+```
+A spark command is provided to finalize installation. It will use [codeigniter4/settings](https://github.com/codeigniter4/settings) to set up the configuration for: Auth.views, Auth.actions, and TOTP.issuer
 ```
 php spark halberd:ini
 ```
@@ -16,7 +37,7 @@ The dependency [pragmarx/google2fa](https://github.com/antonioribeiro/google2fa?
 
 Halberd input form(s) stylesheet should be located at
 ```
-public/css/halberd.css
+public/css/totp.css
 ```
 The QR Code will not be visible without some styling, for instance
 ```
