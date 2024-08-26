@@ -110,7 +110,7 @@ class TOTPActivator implements ActionInterface
         if(null !== $identity)
             return $identity->secret;
 
-        helper('totp2fa');
+        helper('totp');
         $secret = generateSecretKey();
 
         return $identityModel->createCodeIdentity(

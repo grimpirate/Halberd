@@ -31,7 +31,7 @@ class TOTP extends Session
             throw new LogicException('Cannot get the User.');
         }
 
-        helper('totp2fa');
+        helper('totp');
 
         if (
             $token === '' || 

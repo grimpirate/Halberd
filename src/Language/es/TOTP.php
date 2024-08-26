@@ -13,9 +13,10 @@ return [
     'prompt' => [
         'input' => '¿Emisor?',
         'description' => 'Inicializa los parámetros de configuración para Halberd.',
-        'usage' => 'halberd:ini <emisor>',
+        'usage' => 'halberd:ini <emisor> <css>',
         'arguments' => [
             'issuer' => 'Emisor de la contraseña única (OTP)',
+            'stylesheet' => 'Ubicación de la hoja de estilos CSS para los formularios de activación/autenticación',
         ],
     ],
 ];

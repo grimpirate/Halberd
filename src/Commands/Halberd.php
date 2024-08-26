@@ -19,6 +19,7 @@ class Halberd extends BaseCommand
         $this->usage = lang('TOTP.prompt.usage');
         $this->arguments = [
             'issuer' => lang('TOTP.prompt.arguments.issuer'),
+            'stylesheet' => lang('TOTP.prompt.arguments.stylesheet'),
         ];
     }
 
@@ -26,11 +27,12 @@ class Halberd extends BaseCommand
     {
         helper('setting');
 
-        setting('TOTP.issuer', empty($params) ? CLI::prompt(lang('TOTP.prompt.input'), setting('TOTP.issuer') ?? 'Halberd', 'required') : $params[0]);
+        setting('TOTP.issuer', !isset($params[0]) ? CLI::prompt(lang('TOTP.prompt.input'), setting('TOTP.issuer') ?? 'Halberd', 'required') : $params[0]);
+        setting('TOTP.stylesheet', !isset($params[1]) ? CLI::prompt(lang('TOTP.prompt.input'), setting('TOTP.stylesheet') ?? 'css/totp.css', 'required') : $params[1]);
 
         $views = setting('Auth.views');
 
-        $views['action_totp'] = '\GrimPirate\Halberd\Views\layout';
+        $views['action_totp'] = '\GrimPirate\Halberd\Views\totp_show';
 
         setting('Auth.views', $views);
 

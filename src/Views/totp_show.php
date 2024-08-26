@@ -10,7 +10,7 @@ helper('form');
 
     <title><?= lang('TOTP.title2FA') ?></title>
 
-    <?= link_tag('css/totp.css') ?>
+    <?= link_tag(service('settings')->get('TOTP.stylesheet')) ?>
 </head>
 
 <body>
