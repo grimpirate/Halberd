@@ -6,28 +6,12 @@ namespace GrimPirate\Halberd\Authentication\Authenticators;
 
 use CodeIgniter\Shield\Authentication\Authenticators\Session;
 
-use CodeIgniter\Config\Factories;
-use CodeIgniter\Events\Events;
-use CodeIgniter\HTTP\IncomingRequest;
-use CodeIgniter\HTTP\Response;
 use CodeIgniter\I18n\Time;
-use CodeIgniter\Shield\Authentication\Actions\ActionInterface;
-use CodeIgniter\Shield\Authentication\AuthenticationException;
-use CodeIgniter\Shield\Authentication\AuthenticatorInterface;
-use CodeIgniter\Shield\Authentication\Passwords;
 use CodeIgniter\Shield\Entities\User;
 use CodeIgniter\Shield\Entities\UserIdentity;
-use CodeIgniter\Shield\Exceptions\InvalidArgumentException;
 use CodeIgniter\Shield\Exceptions\LogicException;
-use CodeIgniter\Shield\Exceptions\SecurityException;
-use CodeIgniter\Shield\Models\LoginModel;
-use CodeIgniter\Shield\Models\RememberModel;
 use CodeIgniter\Shield\Models\UserIdentityModel;
 use CodeIgniter\Shield\Models\UserModel;
-use CodeIgniter\Shield\Result;
-use Config\Security;
-use Config\Services;
-use stdClass;
 
 class TOTP extends Session
 {
