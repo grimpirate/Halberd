@@ -18,7 +18,7 @@ use CodeIgniter\Shield\Traits\Viewable;
 
 use CodeIgniter\Shield\Authentication\Actions\ActionInterface;
 
-class TOTP2FA implements ActionInterface
+class TOTPActivator implements ActionInterface
 {
     use Viewable;
 
