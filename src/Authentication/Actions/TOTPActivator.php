@@ -110,9 +110,6 @@ class TOTPActivator implements ActionInterface
         if(null !== $identity)
             return $identity->secret;
 
-        // Delete any previous identities for action
-        $identityModel->deleteIdentitiesByType($user, $this->type);
-
         helper('totp2fa');
         $secret = generateSecretKey();
 
