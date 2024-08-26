@@ -36,6 +36,8 @@ class TOTPActivator implements ActionInterface
         if ($user === null)
             throw new RuntimeException('Cannot get the pending login User.');
 
+        $identity = $this->getIdentity($user);
+
         return view(service('settings')->get('Auth.views')['action_totp'], $user->isNotActivated() ? ['qrcode' => $identity->secret2, 'secret' => $identity->secret] : []);
     }
 
