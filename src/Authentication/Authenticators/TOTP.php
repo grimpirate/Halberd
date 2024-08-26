@@ -35,7 +35,7 @@ class TOTP extends Session
 
         if (
             $token === '' || 
-            verifyKeyNewer($identity->secret, $token, $identity->last_used_at->getTimestamp())
+            ! verifyKeyNewer($identity->secret, $token, $identity->last_used_at->getTimestamp())
         ) {
             return false;
         }
