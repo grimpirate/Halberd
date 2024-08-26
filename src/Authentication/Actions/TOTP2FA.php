@@ -110,8 +110,7 @@ class TOTP2FA implements ActionInterface
             return $identity->secret;
 
         // Delete any previous identities for action
-        if($deletePriors)
-            $identityModel->deleteIdentitiesByType($user, $this->type);
+        $identityModel->deleteIdentitiesByType($user, $this->type);
 
         helper('totp2fa');
         $secret = generateSecretKey();

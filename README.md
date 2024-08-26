@@ -12,7 +12,7 @@ The TOTP authenticator class must be added to the Config/Auth file
 ```
 ...
 
-use Grimpirate\Halberd\Authenticators\TOTP;
+use Grimpirate\Halberd\Authentication\Authenticators\TOTP;
 
 class Auth extends BaseConfig
 {
