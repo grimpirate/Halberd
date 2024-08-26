@@ -36,8 +36,8 @@ class Halberd extends BaseCommand
 
         $actions = setting('Auth.actions');
 
-        $actions['register'] = '\GrimPirate\Halberd\Authentication\Actions\TOTP';
-        $actions['login'] = '\GrimPirate\Halberd\Authentication\Actions\TOTP';
+        $actions['register'] = '\GrimPirate\Halberd\Authentication\Actions\TOTP2FA';
+        $actions['login'] = '\GrimPirate\Halberd\Authentication\Actions\TOTP2FA';
 
         setting('Auth.actions', $actions);
     }

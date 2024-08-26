@@ -19,10 +19,10 @@ use CodeIgniter\Shield\Traits\Viewable;
 
 use CodeIgniter\Shield\Authentication\Actions\ActionInterface;
 
-class TOTP implements ActionInterface
+class TOTP2FA implements ActionInterface
 {
     use Viewable;
-    
+
     private string $type = TOTP::ID_TYPE_TOTP_2FA;
 
     /**
