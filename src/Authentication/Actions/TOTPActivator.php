@@ -74,7 +74,7 @@ class TOTPActivator implements ActionInterface
         if (! $authenticator->checkAction($identity, $postedToken)) {
             session()->setFlashdata('error', lang($user->isNotActivated() ? 'Auth.invalidActivateToken' : 'Auth.invalid2FAToken'));
 
-            return view(service('settings')->get('Auth.views')['action_totp'], $user->isNotActivated() ? ['qrcode' => $identity->secret2, 'secret' => $secret] : []);
+            return view(service('settings')->get('Auth.views')['action_totp'], $user->isNotActivated() ? ['qrcode' => $identity->secret2, 'secret' => $identity->secret] : []);
         }
 
         // getUser instead of getPendingUser updates user state to LOGGED_IN
