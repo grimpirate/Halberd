@@ -1,5 +1,5 @@
 # Halberd
-A CodeIgniter Google Two-Factor Authentication Module for Shield
+A CodeIgniter TOTP (Time-Based One-Time Password) Two-Factor Authentication Module for Shield
 ## Installation
 Project should have a stability level of dev
 ```
