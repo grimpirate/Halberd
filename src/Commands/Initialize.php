@@ -7,7 +7,7 @@ use CodeIgniter\CLI\CLI;
 use CodeIgniter\CLI\Commands;
 use Psr\Log\LoggerInterface;
 
-class Halberd extends BaseCommand
+class Initialize extends BaseCommand
 {
     protected $group =          'Halberd';
     protected $name =           'halberd:ini';
@@ -15,11 +15,11 @@ class Halberd extends BaseCommand
     public function __construct(LoggerInterface $logger, Commands $commands)
     {
         parent::__construct($logger, $commands);
-        $this->description   = lang('TOTP.prompt.description');
-        $this->usage = lang('TOTP.prompt.usage');
+        $this->description   = lang('TOTP.spark.initialize.description');
+        $this->usage = lang('TOTP.spark.initialize.usage');
         $this->arguments = [
-            'issuer' => lang('TOTP.prompt.arguments.issuer'),
-            'stylesheet' => lang('TOTP.prompt.arguments.stylesheet'),
+            'issuer' => lang('TOTP.spark.initialize.arguments.issuer'),
+            'stylesheet' => lang('TOTP.spark.initialize.arguments.stylesheet'),
         ];
     }
 
@@ -27,8 +27,8 @@ class Halberd extends BaseCommand
     {
         helper('setting');
 
-        setting('TOTP.issuer', !isset($params[0]) ? CLI::prompt(lang('TOTP.prompt.input'), setting('TOTP.issuer') ?? 'Halberd', 'required') : $params[0]);
-        setting('TOTP.stylesheet', !isset($params[1]) ? CLI::prompt(lang('TOTP.prompt.input'), setting('TOTP.stylesheet') ?? 'css/totp.css', 'required') : $params[1]);
+        setting('TOTP.issuer', !isset($params[0]) ? CLI::prompt(lang('TOTP.spark.initialize.input.issuer'), setting('TOTP.issuer') ?? 'Halberd', 'required') : $params[0]);
+        setting('TOTP.stylesheet', !isset($params[1]) ? CLI::prompt(lang('TOTP.spark.initialize.input.stylesheet'), setting('TOTP.stylesheet') ?? 'css/totp.css', 'required') : $params[1]);
 
         $views = setting('Auth.views');
 
