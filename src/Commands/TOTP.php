@@ -19,10 +19,10 @@ class TOTP extends BaseCommand
     public function __construct(LoggerInterface $logger, Commands $commands)
     {
         parent::__construct($logger, $commands);
-        $this->description   = lang('TOTP.prompt.totp.description');
-        $this->usage = lang('TOTP.prompt.totp.usage');
+        $this->description   = lang('TOTP.spark.totp.description');
+        $this->usage = lang('TOTP.spark.totp.usage');
         $this->arguments = [
-            'id' => lang('TOTP.prompt.totp.arguments.id'),
+            'id' => lang('TOTP.spark.totp.arguments.id'),
         ];
     }
 
@@ -30,7 +30,7 @@ class TOTP extends BaseCommand
     {
         helper('setting');
 
-        $user = auth()->getProvider()->findById(!isset($params[0]) ? CLI::prompt(lang('TOTP.prompt.totp.input'), null, 'required') : $params[0]);
+        $user = auth()->getProvider()->findById(!isset($params[0]) ? CLI::prompt(lang('TOTP.spark.totp.input'), null, 'required') : $params[0]);
 
 		$actionClass = service('settings')->get('Auth.actions')['register'];
 
