@@ -22,7 +22,7 @@ class Auth extends BaseConfig
     'session' => Session::class,
     'hmac'    => HmacSha256::class,
     // 'jwt'     => JWT::class,
-    'totp'    => Grimpirate\Halberd\Authentication\Authenticators\TOTP::class,
+    'totp'    => \Grimpirate\Halberd\Authentication\Authenticators\TOTP::class,
   ];
 
   ...
