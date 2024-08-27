@@ -30,7 +30,7 @@ return [
             'description' => 'Overwrites a TOTP identity for a given user.',
             'usage' => 'halberd:totp <id>',
             'arguments' => [
-                'id' => 'User's ID',
+                'id' => 'User ID',
             ],
         ],
     ],
