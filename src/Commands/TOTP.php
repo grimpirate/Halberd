@@ -30,7 +30,7 @@ class TOTP extends BaseCommand
     {
         helper('setting');
 
-        $user = auth()->getProvider()->findById(!isset($params[0]) ? CLI::prompt(lang('TOTP.spark.totp.input'), null, 'required') : $params[0]);
+        $user = auth()->getProvider()->findById(!isset($params[0]) ? CLI::prompt(lang('TOTP.spark.totp.input.id'), null, 'required') : $params[0]);
 
 		$actionClass = service('settings')->get('Auth.actions')['register'];
 
