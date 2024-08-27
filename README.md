@@ -42,6 +42,3 @@ svg
   fill-rule: evenodd;
 }
 ```
-## Supported Locales
-* en (English)
-* es (Español)
