@@ -31,11 +31,9 @@ class TOTP extends Session
             throw new LogicException('Cannot get the User.');
         }
 
-        helper('totp');
-
         if (
             $token === '' || 
-            ! verifyKeyNewer($identity->secret, $token, $identity->last_used_at->getTimestamp())
+            ! service('halberd')->verifyKeyNewer($identity->secret, $token, $identity->last_used_at->getTimestamp())
         ) {
             return false;
         }

@@ -110,14 +110,14 @@ class TOTPActivator implements ActionInterface
         if(null !== $identity)
             return $identity->secret;
 
-        helper('totp');
-        $secret = generateSecretKey();
+        $halberd = service('halberd');
+        $secret = $halberd->servicegenerateSecretKey();
 
         return $identityModel->createCodeIdentity(
             $user,
             [
                 'type'  => $this->type,
-                'secret2' => qrcode(service('settings')->get('TOTP.issuer'), $user->username ?? $user->email, $secret),
+                'secret2' => $halberd->qrcode(service('settings')->get('TOTP.issuer'), $user->username ?? $user->email, $secret),
                 'last_used_at' => Time::yesterday(),
             ],
             static fn (): string => $secret
