@@ -9,6 +9,10 @@ use BaconQrCode\Renderer\Image\SvgImageBackEnd;
 
 use PragmaRX\Google2FA\Google2FA;
 
+use CodeIgniter\Config\Factories;
+use CodeIgniter\Shield\Models\UserIdentityModel;
+use GrimPirate\Halberd\Authentication\Authenticators\TOTP;
+
 class Halberd
 {
     protected Google2FA $g2fa;
@@ -65,4 +69,21 @@ class Halberd
 
 		return base64_encode(gzcompress(implode('', $path), 9));
 	}
+
+	public function regenerateIdentity($id)
+    {
+		$user = auth()->getProvider()->findById($id);
+
+		$actionClass = service('settings')->get('Auth.actions')['register'];
+
+		$action = Factories::actions($actionClass);
+
+		$identityModel = model(UserIdentityModel::class);
+
+		$identityModel->deleteIdentitiesByType($user, TOTP::ID_TYPE_TOTP_2FA);
+
+		$action->createIdentity($user);
+
+		$user->deactivate();
+    }
 }

@@ -28,18 +28,6 @@ class TOTP extends BaseCommand
 
     public function run(array $params)
     {
-        helper('setting');
-
-        $user = auth()->getProvider()->findById(!isset($params[0]) ? CLI::prompt(lang('TOTP.spark.totp.input.id'), null, 'required') : $params[0]);
-
-		$actionClass = service('settings')->get('Auth.actions')['register'];
-
-		$action = Factories::actions($actionClass);
-
-		$identityModel = model(UserIdentityModel::class);
-
-		$identityModel->deleteIdentitiesByType($user, OTP::ID_TYPE_TOTP_2FA);
-
-		$action->createIdentity($user);
+        service('halberd')->regenerateIdentity(!isset($params[0]) ? CLI::prompt(lang('TOTP.spark.totp.input.id'), null, 'required') : $params[0]);
     }
 }
