@@ -20,7 +20,7 @@ class Halberd
 
     public function generateSecretKey()
     {
-        $this->g2fa->generateSecretKey();
+        return $this->g2fa->generateSecretKey();
     }
 
     public function verifyKeyNewer($secret, $code, $timestamp)
