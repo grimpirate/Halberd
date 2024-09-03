@@ -3,15 +3,15 @@
 namespace GrimPirate\Halberd\Config;
 
 use CodeIgniter\Config\BaseService;
-use CodeIgniter\Shield\TOTP;
+use Grimpirate\Halberd\Halberd;
 
 class Services extends BaseService
 {
-    public static function totp(bool $getShared = true): TOTP
+    public static function halberd(bool $getShared = true): Halberd
     {
         if($getShared)
-            return self::getSharedInstance('totp');
+            return self::getSharedInstance('halberd');
 
-        return new TOTP();
+        return new Halberd();
     }
 }
