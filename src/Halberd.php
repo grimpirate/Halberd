@@ -11,7 +11,12 @@ use PragmaRX\Google2FA\Google2FA;
 
 class Halberd
 {
-    protected Google2FA $g2fa = new Google2FA();
+    protected Google2FA $g2fa;
+
+	public function __construct()
+	{
+		$this->g2fa = new Google2FA();
+	}
 
     public function generateSecretKey()
     {
