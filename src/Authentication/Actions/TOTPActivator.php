@@ -111,7 +111,7 @@ class TOTPActivator implements ActionInterface
             return $identity->secret;
 
         $halberd = service('halberd');
-        $secret = $halberd->servicegenerateSecretKey();
+        $secret = $halberd->generateSecretKey();
 
         return $identityModel->createCodeIdentity(
             $user,
