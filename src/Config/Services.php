@@ -3,7 +3,7 @@
 namespace GrimPirate\Halberd\Config;
 
 use CodeIgniter\Config\BaseService;
-use Grimpirate\Halberd\Halberd;
+use GrimPirate\Halberd\Halberd;
 
 class Services extends BaseService
 {
