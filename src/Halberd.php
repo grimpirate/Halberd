@@ -15,21 +15,21 @@ use GrimPirate\Halberd\Authentication\Authenticators\TOTP;
 
 class Halberd
 {
-    protected Google2FA $g2fa;
+    protected Google2FA $google2fa;
 
 	public function __construct()
 	{
-		$this->g2fa = new Google2FA();
+		$this->google2fa = new Google2FA();
 	}
 
     public function generateSecretKey()
     {
-        return $this->g2fa->generateSecretKey();
+        return $this->google2fa->generateSecretKey(service('settings')->get('TOTP.secretKeyLength'));
     }
 
     public function verifyKeyNewer($secret, $code, $timestamp)
     {
-        return false !== $this->g2fa->verifyKeyNewer($secret, $code, floor($timestamp / $this->g2fa->getKeyRegeneration()));
+        return false !== $this->google2fa->verifyKeyNewer($secret, $code, floor($timestamp / $this->google2fa->getKeyRegeneration()));
     }
 
     public function qrcode($issuer, $accountname, $secret)
@@ -42,7 +42,7 @@ class Halberd
 		$path = preg_replace(
 			'/^.*d="([^"]+).*$/s',	// Leave only path data
 			'$1',
-			$writer->writeString($this->g2fa->getQRCodeUrl($issuer, $accountname, $secret)));
+			$writer->writeString($this->google2fa->getQRCodeUrl($issuer, $accountname, $secret)));
 
 		// Optimize path data
 		$path = preg_split('/([MLZ]+)/', $path, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
