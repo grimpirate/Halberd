@@ -27,7 +27,7 @@ return [
             'input' => [
                 'id' => 'ID?',
             ],
-            'description' => 'Sobrescribe una identidad TOTP para un usuario particular.',
+            'description' => 'Anula la identidad TOTP del usuario.',
             'usage' => 'halberd:totp <id>',
             'arguments' => [
                 'id' => 'ID del usuario',

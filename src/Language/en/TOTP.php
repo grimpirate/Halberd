@@ -27,7 +27,7 @@ return [
             'input' => [
                 'id' => 'ID?',
             ],
-            'description' => 'Overwrites a TOTP identity for a given user.',
+            'description' => "Invalidates a user's TOTP identity.",
             'usage' => 'halberd:totp <id>',
             'arguments' => [
                 'id' => 'User ID',
