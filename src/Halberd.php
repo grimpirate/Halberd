@@ -15,24 +15,29 @@ use GrimPirate\Halberd\Authentication\Authenticators\TOTP;
 
 class Halberd
 {
-    protected Google2FA $google2fa;
+	protected Google2FA $google2fa;
 
 	public function __construct()
 	{
 		$this->google2fa = new Google2FA();
 	}
 
-    public function generateSecretKey()
-    {
-        return $this->google2fa->generateSecretKey(service('settings')->get('TOTP.secretKeyLength'));
-    }
+	public function generateSecretKey()
+	{
+		return $this->google2fa->generateSecretKey(service('settings')->get('TOTP.secretKeyLength'));
+	}
 
-    public function verifyKeyNewer($secret, $code, $timestamp)
-    {
-        return false !== $this->google2fa->verifyKeyNewer($secret, $code, floor($timestamp / $this->google2fa->getKeyRegeneration()));
-    }
+	public function verifyKeyNewer($secret, $code, $timestamp)
+	{
+		return false !== $this->google2fa->verifyKeyNewer($secret, $code, floor($timestamp / $this->google2fa->getKeyRegeneration()));
+	}
 
-    public function qrcode($issuer, $accountname, $secret)
+	public function svg($path)
+	{
+		return '<svg version="1.1" viewBox="-4 -4 45 45"><path d="' . gzuncompress(base64_decode($qrcode)) . '" /></svg>';
+	}
+
+	public function qrcode($issuer, $accountname, $secret)
 	{
 		$writer = new Writer(new ImageRenderer(
 			new RendererStyle(120),
@@ -71,7 +76,7 @@ class Halberd
 	}
 
 	public function regenerateIdentity($id)
-    {
+	{
 		$user = auth()->getProvider()->findById($id);
 
 		$actionClass = service('settings')->get('Auth.actions')['register'];
@@ -85,5 +90,5 @@ class Halberd
 		$action->createIdentity($user);
 
 		$user->deactivate();
-    }
+	}
 }

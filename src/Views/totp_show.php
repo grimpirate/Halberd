@@ -23,7 +23,7 @@ helper('form');
     <p><?= lang(isset($qrcode) ? 'TOTP.googleApp' : 'TOTP.confirmCode') ?></p>
 
 <?php if(isset($qrcode)): ?>
-    <p><svg version="1.1" viewBox="-4 -4 45 45"><path d="<?= gzuncompress(base64_decode($qrcode)) ?>" /></svg></p>
+    <p><?= service('halberd')->svg($qrcode) ?></p>
 
     <p><?= lang('TOTP.problems', ['placeholder' => $secret]) ?></p>
 <?php endif ?>
