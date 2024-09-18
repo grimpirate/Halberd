@@ -24,7 +24,7 @@ class Halberd
 
 	public function generateSecretKey()
 	{
-		return $this->google2fa->generateSecretKey(service('settings')->get('TOTP.secretKeyLength'));
+		return $this->google2fa->generateSecretKey(service('settings')->get('TOTP.secretKeyLength') ?? 16);
 	}
 
 	public function verifyKeyNewer($secret, $code, $timestamp)
