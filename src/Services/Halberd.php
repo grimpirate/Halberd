@@ -34,7 +34,7 @@ class Halberd
 
 	public function svg($path)
 	{
-		return '<svg version="1.1" viewBox="-4 -4 45 45"><path d="' . gzuncompress(base64_decode($qrcode)) . '" /></svg>';
+		return '<svg version="1.1" viewBox="-4 -4 45 45"><path d="' . gzuncompress(base64_decode($path)) . '" /></svg>';
 	}
 
 	public function qrcode($issuer, $accountname, $secret)
