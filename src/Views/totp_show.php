@@ -20,12 +20,14 @@ helper('form');
     <p><?= session('error') ?></p>
 <?php endif ?>
 
-    <p><?= lang(isset($qrcode) ? 'TOTP.googleApp' : 'TOTP.confirmCode') ?></p>
-
 <?php if(isset($qrcode)): ?>
-    <p><?= service('halberd')->svg($qrcode) ?></p>
+    <p><?= lang('TOTP.googleApp') ?></p>
+
+    <p><?= $qrcode ?></p>
 
     <p><?= lang('TOTP.problems', ['placeholder' => $secret]) ?></p>
+<?php else: ?>
+    <p><?= lang('TOTP.confirmCode') ?></p>
 <?php endif ?>
 
     <?= form_open(url_to('auth-action-verify')) ?>

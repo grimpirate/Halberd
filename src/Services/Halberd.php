@@ -1,6 +1,6 @@
 <?php
 
-namespace GrimPirate\Halberd;
+namespace GrimPirate\Halberd\Services;
 
 use BaconQrCode\Writer;
 use BaconQrCode\Renderer\ImageRenderer;
