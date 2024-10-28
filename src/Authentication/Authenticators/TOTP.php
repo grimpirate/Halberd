@@ -25,18 +25,14 @@ class TOTP extends Session
      */
     public function checkAction(UserIdentity $identity, string $token): bool
     {
-        $user = ($this->loggedIn() || $this->isPending()) ? $this->user : null;
-
-        if ($user === null) {
+        if(!$this->loggedIn() && !$this->isPending())
             throw new LogicException('Cannot get the User.');
-        }
 
         if (
             $token === '' || 
-            ! service('halberd')->verifyKeyNewer($identity->secret, $token, $identity->last_used_at->getTimestamp())
-        ) {
+            !service('halberd')->verifyKeyNewer($identity->secret, $token, $identity->last_used_at->getTimestamp())
+        )
             return false;
-        }
 
         // On success - update last_used_at
         $this->userIdentityModel->touchIdentity($identity);
@@ -45,9 +41,7 @@ class TOTP extends Session
         $this->removeSessionUserKey('auth_action');
         $this->removeSessionUserKey('auth_action_message');
 
-        $this->user = $user;
-
-        $this->completeLogin($user);
+        $this->completeLogin($this->user);
 
         return true;
     }
