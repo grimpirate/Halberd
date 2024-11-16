@@ -57,16 +57,8 @@ class Halberd
 			$currCoord = preg_split('/\h+/', $path[$i], -1, PREG_SPLIT_NO_EMPTY);
 			if($path[$i - 1] == 'L')
 			{
-				if($prevCoord[0] == $currCoord[0])
-				{
-					$path[$i - 1] = 'V';
-					$path[$i] = $currCoord[1];
-				}
-				elseif($prevCoord[1] == $currCoord[1])
-				{
-					$path[$i - 1] = 'H';
-					$path[$i] = $currCoord[0];
-				}
+				$path[$i - 1] = $prevCoord[1] == $currCoord[1] ? 'H' : 'V';
+				$path[$i] = $currCoord[$prevCoord[1] == $currCoord[1] ? 0 : 1];
 			}
 			$prevCoord = $currCoord;
 		}
