@@ -51,25 +51,24 @@ class Halberd
 
 		// Optimize path data
 		$path = preg_split('/([MLZ]+)/', $path, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+		$prevCoord = preg_split('/\h+/', $path[1], -1, PREG_SPLIT_NO_EMPTY);
 		for($i = 3; $i < count($path); $i += 2)
 		{
-			$prevCoord = preg_split('/\h+/', $path[$i - 2], -1, PREG_SPLIT_NO_EMPTY);
 			$currCoord = preg_split('/\h+/', $path[$i], -1, PREG_SPLIT_NO_EMPTY);
 			if($path[$i - 1] == 'L')
 			{
 				if($prevCoord[0] == $currCoord[0])
+				{
 					$path[$i - 1] = 'V';
+					$path[$i] = $currCoord[1];
+				}
 				elseif($prevCoord[1] == $currCoord[1])
+				{
 					$path[$i - 1] = 'H';
+					$path[$i] = $currCoord[0];
+				}
 			}
-		}
-		for($i = 2; $i < count($path) - 1; $i += 2)
-		{
-			$currCoord = preg_split('/\h+/', $path[$i + 1], -1, PREG_SPLIT_NO_EMPTY);
-			if($path[$i] == 'H')
-				$path[$i + 1] = $currCoord[0];
-			elseif ($path[$i] == 'V')
-				$path[$i + 1] = $currCoord[1];
+			$prevCoord = $currCoord;
 		}
 
 		return base64_encode(gzcompress(implode('', $path), 9));
