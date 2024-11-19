@@ -32,11 +32,12 @@ helper('form');
 
     <?= form_open(url_to('auth-action-verify')) ?>
         <?= form_input([
-            'type' => 'number',
+            'type' => 'text',
             'name' => 'token',
             'placeholder' => '000000',
             'inputmode' => 'numeric',
             'pattern' => '[0-9]{6}',
+            'autocomplete' => 'one-time-code',
             'required' => true,
         ]) ?>
         <?= form_submit('', lang('Auth.confirm')) ?>
