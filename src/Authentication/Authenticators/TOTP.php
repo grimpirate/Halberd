@@ -28,10 +28,8 @@ class TOTP extends Session
         if(!$this->loggedIn() && !$this->isPending())
             throw new LogicException('Cannot get the User.');
 
-        if (
-            $token === '' || 
-            !service('halberd')->verifyKeyNewer($identity->secret, $token, $identity->last_used_at->getTimestamp())
-        )
+        // $token cannot be an empty '' string
+        if (!service('halberd')->verifyKeyNewer($identity->secret, $token, $identity->last_used_at->getTimestamp()))
             return false;
 
         // On success - update last_used_at
