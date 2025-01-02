@@ -33,6 +33,7 @@ class TOTPActivator implements ActionInterface
         $authenticator = auth('totp')->getAuthenticator();
 
         $user = $authenticator->getPendingUser();
+        
         if ($user === null)
             throw new RuntimeException('Cannot get the pending login User.');
 
@@ -65,13 +66,15 @@ class TOTPActivator implements ActionInterface
         $postedToken = $request->getVar('token');
 
         $user = $authenticator->getPendingUser();
+        
         if ($user === null)
             throw new RuntimeException('Cannot get the pending login User.');
 
         $identity = $this->getIdentity($user);
 
         // No match - let them try again.
-        if (! $authenticator->checkAction($identity, $postedToken)) {
+        if (! $authenticator->checkAction($identity, $postedToken))
+        {
             session()->setFlashdata('error', lang($user->isNotActivated() ? 'Auth.invalidActivateToken' : 'Auth.invalid2FAToken'));
 
             return view(service('settings')->get('Auth.views')['action_totp'], $user->isNotActivated() ? ['qrcode' => service('halberd')->svg($identity->secret2), 'secret' => $identity->secret] : []);
@@ -86,9 +89,9 @@ class TOTPActivator implements ActionInterface
             $user->activate();
 
         // Success!
-        return $isNotActivated ? 
-            redirect()->to(config('Auth')->registerRedirect())
-            ->with('message', lang('Auth.registerSuccess'))
+        return $isNotActivated
+            ? redirect()->to(config('Auth')->registerRedirect())
+                ->with('message', lang('Auth.registerSuccess'))
             : redirect()->to(config('Auth')->loginRedirect());
     }
 
@@ -107,21 +110,20 @@ class TOTPActivator implements ActionInterface
             $this->type
         );
 
-        if(null !== $identity)
-            return $identity->secret;
-
         $halberd = service('halberd');
         $secret = $halberd->generateSecretKey();
 
-        return $identityModel->createCodeIdentity(
-            $user,
-            [
-                'type'  => $this->type,
-                'secret2' => $halberd->qrcode(service('settings')->get('TOTP.issuer'), $user->username ?? $user->email, $secret),
-                'last_used_at' => Time::yesterday(),
-            ],
-            static fn (): string => $secret
-        );
+        return null !== $identity
+            ? $identity->secret
+            : $identityModel->createCodeIdentity(
+                $user,
+                [
+                    'type'  => $this->type,
+                    'secret2' => $halberd->qrcode(service('settings')->get('TOTP.issuer'), $user->username ?? $user->email, $secret),
+                    'last_used_at' => Time::yesterday(),
+                ],
+                static fn (): string => $secret
+            );
     }
 
     /**
